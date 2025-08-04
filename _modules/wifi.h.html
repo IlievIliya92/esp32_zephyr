@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>wifi.h &mdash; ESP32 Zephyr</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: rgba(52,49,49,1) 100%;" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ESP32 Zephyr
+          </a>
+              <div class="version">
+                main
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/server_h.html">Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/adc_h.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/pwm_h.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/cmd_interpreter_h.html">Command Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/wifi_h.html">Wifi</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: rgba(52,49,49,1) 100%;" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESP32 Zephyr</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">wifi.h</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for wifi.h</h1><div class="highlight"><pre>
+<span></span><span class="cm">/****************************************************************************</span>
+<span class="cm"> * **File:** wifi.h</span>
+<span class="cm"> *</span>
+<span class="cm"> * **Description:** WiFi interface abstraction.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Defines function pointer types for WiFi operations and the WiFi interface</span>
+<span class="cm"> * struct containing those function pointers. Provides an interface function to</span>
+<span class="cm"> * get the WiFi interface instance.</span>
+<span class="cm"> */</span>
+
+<span class="cp">#ifndef WIFI_H</span>
+<div class="viewcode-block" id="c.WIFI_H"><span class="cp">#define WIFI_H</span></div>
+
+<span class="cm">/******************************** INCLUDE FILES *******************************/</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdbool.h&gt;</span>
+
+<span class="cm">/********************************** DEFINES ***********************************/</span>
+
+<span class="cm">/********************************* TYPEDEFS ***********************************/</span>
+
+<div class="viewcode-block" id="c.wifi_connect_t"><span class="cm">/**</span>
+<span class="cm"> * Function pointer type for connecting to a WiFi network.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Attempts to connect to a WiFi network given an SSID and a password.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] ssid Pointer to a null-terminated string containing the SSID.</span>
+<span class="cm"> * @param[in] password Pointer to a null-terminated string containing the password.</span>
+<span class="cm"> *                        The password may be modified during the connection attempt.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return true if the connection was successful, false otherwise.</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">wifi_connect_t</span><span class="p">)(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">ssid</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">password</span><span class="p">);</span></div>
+
+<div class="viewcode-block" id="c.wifi_disconnect_t"><span class="cm">/**</span>
+<span class="cm"> * Function pointer type for disconnecting from the WiFi network.</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">wifi_disconnect_t</span><span class="p">)(</span><span class="kt">void</span><span class="p">);</span></div>
+
+<div class="viewcode-block" id="c.wifi_status_t"><span class="cm">/**</span>
+<span class="cm"> * Function pointer type for reporting the WiFi status.</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">wifi_status_t</span><span class="p">)(</span><span class="kt">void</span><span class="p">);</span></div>
+
+<div class="viewcode-block" id="c._wifi_iface_t"><div class="viewcode-block" id="c.wifi_iface_t"><a class="viewcode-back" href="../api/wifi_h.html#c.wifi_iface_t">[docs]</a><span class="cm">/**</span>
+<span class="cm"> * @struct wifi_iface_t</span>
+<span class="cm"> * WiFi interface containing function pointers for WiFi operations.</span>
+<span class="cm"> *</span>
+<span class="cm"> * This struct abstracts WiFi operations with function pointers to connect,</span>
+<span class="cm"> * disconnect, and report status.</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">_wifi_iface_t</span><span class="w"> </span><span class="p">{</span>
+<div class="viewcode-block" id="c._wifi_iface_t.connect"><div class="viewcode-block" id="c.wifi_iface_t.connect"><span class="w">    </span><span class="n">wifi_connect_t</span><span class="w"> </span><span class="n">connect</span><span class="p">;</span><span class="w">        </span><span class="cm">/**&lt; Connect to WiFi network */</span></div></div>
+<div class="viewcode-block" id="c._wifi_iface_t.disconnect"><div class="viewcode-block" id="c.wifi_iface_t.disconnect"><span class="w">    </span><span class="n">wifi_disconnect_t</span><span class="w"> </span><span class="n">disconnect</span><span class="p">;</span><span class="w">  </span><span class="cm">/**&lt; Disconnect from WiFi network */</span></div></div>
+<div class="viewcode-block" id="c._wifi_iface_t.status"><div class="viewcode-block" id="c.wifi_iface_t.status"><span class="w">    </span><span class="n">wifi_status_t</span><span class="w"> </span><span class="n">status</span><span class="p">;</span><span class="w">          </span><span class="cm">/**&lt; Report WiFi status */</span></div></div>
+<span class="p">}</span><span class="w"> </span><span class="n">wifi_iface_t</span><span class="p">;</span></div></div>
+
+<span class="cm">/***************************** INTERFACE FUNCTIONS ****************************/</span>
+
+<div class="viewcode-block" id="c.wifi_get"><a class="viewcode-back" href="../api/wifi_h.html#c.wifi_get">[docs]</a><span class="cm">/**</span>
+<span class="cm"> * Get the WiFi interface instance.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Returns a pointer to the WiFi interface struct containing WiFi operation functions.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Pointer to a `wifi_iface_t` instance.</span>
+<span class="cm"> */</span>
+<span class="n">wifi_iface_t</span><span class="w"> </span><span class="o">*</span><span class="nf">wifi_get</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span></div>
+
+<span class="cp">#endif </span><span class="cm">/* WIFI_H */</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>server.h &mdash; ESP32 Zephyr</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: rgba(52,49,49,1) 100%;" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ESP32 Zephyr
+          </a>
+              <div class="version">
+                main
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/server_h.html">Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/adc_h.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/pwm_h.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/cmd_interpreter_h.html">Command Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/wifi_h.html">Wifi</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: rgba(52,49,49,1) 100%;" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESP32 Zephyr</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">server.h</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for server.h</h1><div class="highlight"><pre>
+<span></span><span class="cm">/****************************************************************************</span>
+<span class="cm"> * **File:** server.h</span>
+<span class="cm"> *</span>
+<span class="cm"> * **Description:** Server abstraction interface.</span>
+<span class="cm"> *</span>
+<span class="cm"> *</span>
+<span class="cm"> * Defines the server type, server protocol enumeration, and interface functions</span>
+<span class="cm"> * for creating, destroying, and starting a server.</span>
+<span class="cm"> ****************************************************************************/</span>
+
+<span class="cp">#ifndef SERVER_H</span>
+<div class="viewcode-block" id="c.SERVER_H"><span class="cp">#define SERVER_H</span></div>
+
+<span class="cm">/******************************** INCLUDE FILES *******************************/</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdbool.h&gt;</span>
+
+<span class="cm">/******************************** LOCAL DEFINES *******************************/</span>
+
+<span class="cm">/********************************* TYPEDEFS ***********************************/</span>
+
+<div class="viewcode-block" id="c.server_t"><span class="cm">/**</span>
+<span class="cm"> * Opaque server instance type.</span>
+<span class="cm"> */</span>
+<div class="viewcode-block" id="c._server_t"><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">_server_t</span><span class="w"> </span><span class="n">server_t</span><span class="p">;</span></div></div>
+
+<div class="viewcode-block" id="c._server_proto_t"><div class="viewcode-block" id="c.server_proto_t"><a class="viewcode-back" href="../api/server_h.html#c.server_proto_t">[docs]</a><span class="cm">/**</span>
+<span class="cm"> * Enum for selecting the server protocol type.</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="n">_server_proto_t</span>
+<span class="p">{</span>
+<div class="viewcode-block" id="c._server_proto_t.SERVER_PROTO_UDP"><div class="viewcode-block" id="c.server_proto_t.SERVER_PROTO_UDP"><a class="viewcode-back" href="../api/server_h.html#c.server_proto_t.SERVER_PROTO_UDP">[docs]</a><span class="w">    </span><span class="n">SERVER_PROTO_UDP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="cm">/**&lt; UDP protocol */</span></div></div>
+<div class="viewcode-block" id="c._server_proto_t.SERVER_PROTO_TCP"><div class="viewcode-block" id="c.server_proto_t.SERVER_PROTO_TCP"><a class="viewcode-back" href="../api/server_h.html#c.server_proto_t.SERVER_PROTO_TCP">[docs]</a><span class="w">    </span><span class="n">SERVER_PROTO_TCP</span><span class="p">,</span><span class="w">     </span><span class="cm">/**&lt; TCP protocol */</span></div></div>
+<div class="viewcode-block" id="c._server_proto_t.SERVER_PROTO_N"><div class="viewcode-block" id="c.server_proto_t.SERVER_PROTO_N"><a class="viewcode-back" href="../api/server_h.html#c.server_proto_t.SERVER_PROTO_N">[docs]</a><span class="w">    </span><span class="n">SERVER_PROTO_N</span><span class="w">        </span><span class="cm">/**&lt; Count of server protocol types */</span></div></div>
+<span class="p">}</span><span class="w"> </span><span class="n">server_proto_t</span><span class="p">;</span></div></div>
+
+<span class="cm">/***************************** INTERFACE FUNCTIONS ****************************/</span>
+
+<div class="viewcode-block" id="c.server_new"><a class="viewcode-back" href="../api/server_h.html#c.server_new">[docs]</a><span class="cm">/**</span>
+<span class="cm"> * Create a new server instance.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Allocates and initializes a new server of the specified protocol type,</span>
+<span class="cm"> * listening on the given port. Optionally registers the service if requested.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param type The server protocol type (UDP or TCP).</span>
+<span class="cm"> * @param port The port number on which the server will listen.</span>
+<span class="cm"> * @param register_service Set to true to register the service, false otherwise.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Pointer to the newly created server instance, or NULL on failure.</span>
+<span class="cm"> */</span>
+<span class="n">server_t</span><span class="w"> </span><span class="o">*</span><span class="nf">server_new</span><span class="p">(</span><span class="n">server_proto_t</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">port</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">register_service</span><span class="p">);</span></div>
+
+<div class="viewcode-block" id="c.server_destroy"><a class="viewcode-back" href="../api/server_h.html#c.server_destroy">[docs]</a><span class="cm">/**</span>
+<span class="cm"> * Destroy a server instance.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Deallocates and cleans up the server instance pointed to by `self_p`.</span>
+<span class="cm"> * After this call, the pointer will be set to NULL.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param self_p Pointer to a pointer to the server instance to destroy.</span>
+<span class="cm"> */</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">server_destroy</span><span class="p">(</span><span class="n">server_t</span><span class="w"> </span><span class="o">**</span><span class="n">self_p</span><span class="p">);</span></div>
+
+<div class="viewcode-block" id="c.server_start"><a class="viewcode-back" href="../api/server_h.html#c.server_start">[docs]</a><span class="cm">/**</span>
+<span class="cm"> * Start the server.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Starts the server. The parameters p1, p2, p3 are generic pointers whose</span>
+<span class="cm"> * meaning depends on the implementation and server type.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param p1 Pointer to context or first argument.</span>
+<span class="cm"> * @param p2 Pointer to context or second argument.</span>
+<span class="cm"> * @param p3 Pointer to context or third argument.</span>
+<span class="cm"> */</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">server_start</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">p1</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">p2</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">p3</span><span class="p">);</span></div>
+
+<span class="cp">#endif </span><span class="cm">/* SERVER_H */</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

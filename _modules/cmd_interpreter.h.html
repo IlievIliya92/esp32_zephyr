@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cmd_interpreter.h &mdash; ESP32 Zephyr</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: rgba(52,49,49,1) 100%;" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ESP32 Zephyr
+          </a>
+              <div class="version">
+                main
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/server_h.html">Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/adc_h.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/pwm_h.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/cmd_interpreter_h.html">Command Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/wifi_h.html">Wifi</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: rgba(52,49,49,1) 100%;" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESP32 Zephyr</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">cmd_interpreter.h</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cmd_interpreter.h</h1><div class="highlight"><pre>
+<span></span><span class="cm">/****************************************************************************</span>
+<span class="cm"> * **File:** cmd_interpreter.h</span>
+<span class="cm"> *</span>
+<span class="cm"> * **Description:** Command interpreter interface for handling protobuf commands.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Defines the command handler function type and interface functions to get the</span>
+<span class="cm"> * command interpreter, decode requests from a buffer, and encode responses into a buffer.</span>
+<span class="cm"> */</span>
+
+<span class="cp">#ifndef CMDS_H</span>
+<div class="viewcode-block" id="c.CMDS_H"><span class="cp">#define CMDS_H</span></div>
+
+<span class="cm">/******************************** INCLUDE FILES *******************************/</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;proto/cmds.pb.h&quot;</span>
+
+<span class="cm">/********************************** DEFINES ***********************************/</span>
+
+<span class="cm">/********************************* TYPEDEFS ***********************************/</span>
+
+<div class="viewcode-block" id="c.cmd_hndlr_t"><span class="cm">/**</span>
+<span class="cm"> * Command handler function pointer type.</span>
+<span class="cm"> *</span>
+<span class="cm"> * This function processes a command request and populates the command response.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] req Pointer to the decoded request message.</span>
+<span class="cm"> * @param[out] res Pointer to the response message to populate.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Integer status code (e.g. 0 on success, non-zero on error).</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">cmd_hndlr_t</span><span class="p">)(</span><span class="k">const</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="o">*</span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">*</span><span class="n">res</span><span class="p">);</span></div>
+
+<span class="cm">/***************************** INTERFACE FUNCTIONS ****************************/</span>
+
+<div class="viewcode-block" id="c.cmd_interpreter_get"><a class="viewcode-back" href="../api/cmd_interpreter_h.html#c.cmd_interpreter_get">[docs]</a><span class="cm">/**</span>
+<span class="cm"> * Get a pointer to the command interpreter handler array.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Returns a pointer to an array of command handler function pointers,</span>
+<span class="cm"> * which the interpreter uses to dispatch commands.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Pointer to an array of command handler function pointers.</span>
+<span class="cm"> */</span>
+<span class="n">cmd_hndlr_t</span><span class="w"> </span><span class="o">*</span><span class="nf">cmd_interpreter_get</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span></div>
+
+<div class="viewcode-block" id="c.cmd_interpreter_decode"><a class="viewcode-back" href="../api/cmd_interpreter_h.html#c.cmd_interpreter_decode">[docs]</a><span class="cm">/**</span>
+<span class="cm"> * Decode a command request from a buffer.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Parses the serialized request data from the buffer into the protobuf</span>
+<span class="cm"> * request struct.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] buffer Pointer to the input buffer containing serialized data.</span>
+<span class="cm"> * @param[in] buffer_len Length of the input buffer in bytes.</span>
+<span class="cm"> * @param[out] req Pointer to the request struct to populate.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Integer status code (0 on success, non-zero on failure).</span>
+<span class="cm"> */</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">cmd_interpreter_decode</span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">buffer_len</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="o">*</span><span class="n">req</span><span class="p">);</span></div>
+
+<div class="viewcode-block" id="c.cmd_interpreter_encode"><a class="viewcode-back" href="../api/cmd_interpreter_h.html#c.cmd_interpreter_encode">[docs]</a><span class="cm">/**</span>
+<span class="cm"> * Encode a command response into a buffer.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Serializes the protobuf response struct into a buffer.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[out] buffer Pointer to the output buffer to hold serialized data.</span>
+<span class="cm"> * @param[in] buffer_len_max Maximum size of the output buffer in bytes.</span>
+<span class="cm"> * @param[out] buffer_len Pointer to store the actual length of serialized data.</span>
+<span class="cm"> * @param[in] res Pointer to the response struct to encode.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Integer status code (0 on success, non-zero on failure).</span>
+<span class="cm"> */</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">cmd_interpreter_encode</span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">buffer_len_max</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">buffer_len</span><span class="p">,</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">*</span><span class="n">res</span><span class="p">);</span></div>
+
+<span class="cp">#endif </span><span class="cm">/* CMDS_H */</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

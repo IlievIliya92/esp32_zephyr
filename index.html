@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ESP32 Zephyr &mdash; ESP32 Zephyr</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/design-tabs.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Server" href="api/server_h.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: rgba(52,49,49,1) 100%;" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            ESP32 Zephyr
+          </a>
+              <div class="version">
+                main
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/server_h.html">Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/adc_h.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/pwm_h.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/cmd_interpreter_h.html">Command Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/wifi_h.html">Wifi</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: rgba(52,49,49,1) 100%;" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">ESP32 Zephyr</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ESP32 Zephyr</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="esp32-zephyr">
+<h1>ESP32 Zephyr<a class="headerlink" href="#esp32-zephyr" title="Permalink to this heading"></a></h1>
+<section id="build">
+<h2>Build<a class="headerlink" href="#build" title="Permalink to this heading"></a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">source</span><span class="w">  </span><span class="o">[</span>PATH_TO_ZEPHYRPORJECT<span class="o">]</span>/zephyrproject/zephyr/zephyr-env.sh
+<span class="gp">$ </span>west<span class="w"> </span>build<span class="w"> </span>-b<span class="w"> </span>esp32_devkitc/esp32/procpu<span class="w"> </span>--<span class="w"> </span>-DSSID<span class="o">=</span><span class="s2">&quot;WIFI_SSID&quot;</span><span class="w"> </span>-DPSK<span class="o">=</span><span class="s2">&quot;WIFI_PASS&quot;</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">WIFI_SSID</span></code> is the SSID of the Wifi network that you wish to connect to
+and <code class="docutils literal notranslate"><span class="pre">WIFI_PASS</span></code> the authentication for it.</p>
+</section>
+<section id="flash">
+<h2>Flash<a class="headerlink" href="#flash" title="Permalink to this heading"></a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>west<span class="w"> </span>flash
+</pre></div>
+</div>
+</section>
+<section id="monitor">
+<h2>Monitor<a class="headerlink" href="#monitor" title="Permalink to this heading"></a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>west<span class="w"> </span>espressif<span class="w"> </span>monitor
+</pre></div>
+</div>
+<p>The results should look similar to the output shown below:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">*** Booting Zephyr OS build zephyr-v3.5.0-660-ge7340282a795 ***</span>
+<span class="go">[00:00:02.244,000] &lt;inf&gt; wifi: Connecting to: WIFI_SSID</span>
+<span class="go">[00:00:02.246,000] &lt;inf&gt; wifi: Waiting for authorization...</span>
+<span class="go">[00:00:08.984,000] &lt;dbg&gt; esp32_wifi: esp32_wifi_send: pkt sent 0x3fff82c4 len 291</span>
+<span class="go">[00:00:11.090,000] &lt;dbg&gt; esp32_wifi: esp32_wifi_send: pkt sent 0x3fff82c4 len 298</span>
+<span class="go">[00:00:11.119,000] &lt;inf&gt; net_dhcpv4: Received: xxx.xxx.xxx.xxx</span>
+<span class="go">[00:00:15.939,000] &lt;inf&gt; wifi: Connected</span>
+<span class="go">[00:00:15.940,000] &lt;inf&gt; wifi: Wifi network state:</span>
+<span class="go">[00:00:15.940,000] &lt;inf&gt; wifi:  SSID: WIFI_SSID</span>
+<span class="go">[00:00:15.940,000] &lt;inf&gt; wifi:  Band: 2.4GHz</span>
+<span class="go">[00:00:15.940,000] &lt;inf&gt; wifi:  Channel: xx</span>
+<span class="go">[00:00:15.940,000] &lt;inf&gt; wifi:  Security: WPA2-PSK</span>
+<span class="go">[00:00:15.940,000] &lt;inf&gt; wifi:  RSSI: xx</span>
+<span class="go">[00:00:15.940,000] &lt;inf&gt; server: Creating new server object</span>
+<span class="go">[00:00:11.904,000] &lt;inf&gt; server: Waiting for TCP connections on port 4242...</span>
+</pre></div>
+</div>
+</section>
+<section id="test">
+<h2>Test<a class="headerlink" href="#test" title="Permalink to this heading"></a></h2>
+<section id="service-discovery">
+<h3>Service discovery<a class="headerlink" href="#service-discovery" title="Permalink to this heading"></a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$  </span>avahi-resolve<span class="w"> </span>-4<span class="w"> </span>-n<span class="w"> </span>esp32.local
+<span class="go">esp32.local xxx.xxx.xxx.xxx</span>
+</pre></div>
+</div>
+</section>
+<section id="send-receive-test-message">
+<h3>Send/Receive test message<a class="headerlink" href="#send-receive-test-message" title="Permalink to this heading"></a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>test/py
+<span class="gp">$ </span>python3<span class="w"> </span>esp32_client.py<span class="w"> </span>--dest_addr<span class="w"> </span>tcp:xxx.xxx.xxx.xxx:4242
+</pre></div>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api/server_h.html" class="btn btn-neutral float-right" title="Server" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

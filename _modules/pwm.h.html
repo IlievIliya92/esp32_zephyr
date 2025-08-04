@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pwm.h &mdash; ESP32 Zephyr</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: rgba(52,49,49,1) 100%;" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ESP32 Zephyr
+          </a>
+              <div class="version">
+                main
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/server_h.html">Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/adc_h.html">ADC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/pwm_h.html">PWM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/cmd_interpreter_h.html">Command Interpreter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/wifi_h.html">Wifi</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: rgba(52,49,49,1) 100%;" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESP32 Zephyr</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">pwm.h</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pwm.h</h1><div class="highlight"><pre>
+<span></span><span class="cm">/****************************************************************************</span>
+<span class="cm"> * **File:** pwm.h</span>
+<span class="cm"> *</span>
+<span class="cm"> * **Description:** PWM interface definitions and functions.</span>
+<span class="cm"> *</span>
+<span class="cm"> * This header defines types and the interface for PWM module.</span>
+<span class="cm"> ****************************************************************************/</span>
+
+<span class="cp">#ifndef PWM_H</span>
+<div class="viewcode-block" id="c.PWM_H"><span class="cp">#define PWM_H</span></div>
+
+<span class="cm">/******************************** INCLUDE FILES *******************************/</span>
+
+<span class="cm">/******************************** LOCAL DEFINES *******************************/</span>
+
+<div class="viewcode-block" id="c.IntVoid_t"><span class="cm">/********************************* TYPEDEFS ***********************************/</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">IntVoid_t</span><span class="p">)(</span><span class="kt">void</span><span class="p">);</span></div>
+<div class="viewcode-block" id="c.IntInt2xUint32_t"><span class="k">typedef</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">IntInt2xUint32_t</span><span class="p">)(</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="p">);</span></div>
+<div class="viewcode-block" id="c.IntInt2xUint32Ptr_t"><span class="k">typedef</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">IntInt2xUint32Ptr_t</span><span class="p">)(</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="p">);</span></div>
+<div class="viewcode-block" id="c.Void2xUint32Ptr_t"><span class="k">typedef</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">Void2xUint32Ptr_t</span><span class="p">)(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="p">);</span></div>
+
+<div class="viewcode-block" id="c._pwm_t"><div class="viewcode-block" id="c.pwm_t"><a class="viewcode-back" href="../api/pwm_h.html#c.pwm_t">[docs]</a><span class="cm">/**</span>
+<span class="cm"> * @brief Structure representing PWM interface and state.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Contains function pointers for initialization and duty cycle manipulation,</span>
+<span class="cm"> * as well as an initialization completion flag.</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">_pwm_t</span><span class="w"> </span><span class="p">{</span>
+<div class="viewcode-block" id="c._pwm_t.init"><div class="viewcode-block" id="c.pwm_t.init"><span class="w">    </span><span class="n">IntVoid_t</span><span class="w"> </span><span class="n">init</span><span class="p">;</span><span class="w"> </span><span class="cm">/**&lt; Pointer to the initialization function. */</span></div></div>
+<div class="viewcode-block" id="c._pwm_t.channels_n_get"><div class="viewcode-block" id="c.pwm_t.channels_n_get"><span class="w">    </span><span class="n">IntVoid_t</span><span class="w"> </span><span class="n">channels_n_get</span><span class="p">;</span><span class="w"> </span><span class="cm">/**&lt; Function pointer returning the number of ADC channels */</span></div></div>
+<div class="viewcode-block" id="c._pwm_t.init_done"><div class="viewcode-block" id="c.pwm_t.init_done"><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">init_done</span><span class="p">;</span><span class="w"> </span><span class="cm">/**&lt; Flag indicating if initialization is complete.*/</span></div></div>
+<div class="viewcode-block" id="c._pwm_t.duty_cycle_set"><div class="viewcode-block" id="c.pwm_t.duty_cycle_set"><span class="w">    </span><span class="n">IntInt2xUint32_t</span><span class="w"> </span><span class="n">duty_cycle_set</span><span class="p">;</span><span class="w"> </span><span class="cm">/**&lt; Function to set PWM duty cycle. */</span></div></div>
+<div class="viewcode-block" id="c._pwm_t.duty_cycle_get"><div class="viewcode-block" id="c.pwm_t.duty_cycle_get"><span class="w">    </span><span class="n">IntInt2xUint32Ptr_t</span><span class="w"> </span><span class="n">duty_cycle_get</span><span class="p">;</span><span class="w"> </span><span class="cm">/**&lt; Function to get PWM duty cycle. */</span></div></div>
+<div class="viewcode-block" id="c._pwm_t.periods_interval_get"><div class="viewcode-block" id="c.pwm_t.periods_interval_get"><span class="w">    </span><span class="n">Void2xUint32Ptr_t</span><span class="w"> </span><span class="n">periods_interval_get</span><span class="p">;</span><span class="w"> </span><span class="cm">/**&lt; Retrieve max/min period intervals in ns */</span></div></div>
+<span class="p">}</span><span class="w"> </span><span class="n">pwm_t</span><span class="p">;</span></div></div>
+
+
+<div class="viewcode-block" id="c.pwm_get"><a class="viewcode-back" href="../api/pwm_h.html#c.pwm_get">[docs]</a><span class="cm">/***************************** INTERFACE FUNCTIONS ****************************/</span>
+<span class="cm">/**</span>
+<span class="cm"> * @brief Retrieve the PWM interface instance.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Returns a pointer to a static or singleton PWM structure.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return pwm_t* Pointer to the PWM interface.</span>
+<span class="cm"> */</span>
+<span class="n">pwm_t</span><span class="w"> </span><span class="o">*</span><span class="nf">pwm_get</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span></div>
+
+<span class="cp">#endif </span><span class="cm">/* PWM_H */</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
